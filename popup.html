@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <style>
+    body {
+      width: 250px;
+      max-height: 500px;
+    }
+
+    .container {
+      /* text-align: center; */
+      padding: 5px;
+    }
+
+    button {
+      margin-bottom: 5px;
+      width: 100%;
+    }
+
+    #messages {
+      color: #28a745 !important
+    }
+
+    #warnings {
+      color: #ffc107 !important
+    }
+
+    #progress {
+      display: none;
+    }
+
+    .text-center {
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h3>Backup Cookies</h3>
+    <button id="backup">Backup All Cookies</button>
+    <hr>
+    <h3>Restore Cookies</h3>
+    <p>
+      <small>Select your latest .ckz file</small>
+    </p>
+    <input type="file" id="restore" name="file" id="">
+    <br>
+    <br>
+    <div id="progress">
+      <progress id="progressbar" value="0" max="0"></progress>
+    </div>
+    <br>
+    <div id="messages">
+    </div>
+    <div id="warnings"></div>
+  </div>
+  <!-- credits -->
+  <p class="text-center"><small>Made by <a target="_blank" href="http://github.com/candh">candh</a></small></p>
+</body>
+
+<!-- https://bitwiseshiftleft.github.io/sjcl/sjcl.js -->
+<script src="sjcl.js"></script>
+<script src="popup.js"></script>
+
+</html>

@@ -1,0 +1,11 @@
+{
+  "name" : "Cookie Backup and Restore",
+  "version" : "1.0",
+  "description" : "Should backup all the cookies and must be able to restore them.",
+  "permissions": [ "cookies", "*://*/*" ],
+  "icons": { "16": "cookie.png", "48": "cookie.png", "128": "cookie.png" },
+  "browser_action" : {
+    "default_popup" : "popup.html"
+  },
+  "manifest_version": 2
+}
