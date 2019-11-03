@@ -50,7 +50,7 @@ function handleFileSelect(e) {
 
     let total = 0
     for (const cookie of cookies) {
-      let url = "http" + (cookie.secure ? "s" : "") + "://" + cookie.domain + cookie.path
+      let url = "http" + (cookie.secure ? "s" : "") + "://" + (cookie.domain.startsWith('.') ? cookie.domain.slice(1) : cookie.domain) + cookie.path
 
       if (cookie.hostOnly == true) {
         // https://developer.chrome.com/extensions/cookies#method-set
@@ -77,6 +77,7 @@ function handleFileSelect(e) {
         console.error("Error while restoring the cookie for the URL " + cookie.url)
         console.error(JSON.stringify(cookie))
         console.error(JSON.stringify(chrome.runtime.lastError))
+        console.error(chrome.runtime.lastError)
         document.getElementById("warnings").innerHTML += `<p>Error while restoring the cookie ${cookie.name} for the URL ${cookie.url}</p>`
       } else {
         total++
