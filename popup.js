@@ -49,8 +49,19 @@ function handleFileSelect(e) {
     progressbar.setAttribute('max', cookies.length)
 
     let total = 0
+
+    // lets save some syscalls by defining it once up here
+    // if i call it in the loop, its not gonna be very slow but hey,
+    // whose that concerned about that much accuracy of cookie expriation dates
+    const epoch = (new Date).getTime() / 1000
+
     for (const cookie of cookies) {
       let url = "http" + (cookie.secure ? "s" : "") + "://" + (cookie.domain.startsWith('.') ? cookie.domain.slice(1) : cookie.domain) + cookie.path
+
+      if (epoch > cookie.expirationDate) {
+        document.getElementById("warnings").innerHTML += `<p>Cookie ${cookie.name} for the domain ${url} has expired</p>`
+        continue;
+      }
 
       if (cookie.hostOnly == true) {
         // https://developer.chrome.com/extensions/cookies#method-set

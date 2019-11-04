@@ -1,6 +1,6 @@
 {
   "name" : "Cookie Backup and Restore",
-  "version" : "2.0",
+  "version" : "2.1",
   "description" : "Should backup all the cookies and must be able to restore them.",
   "permissions": [ "cookies", "<all_urls>" ],
   "icons": { "16": "cookie.png", "48": "cookie.png", "128": "cookie.png" },
