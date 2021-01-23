@@ -1,67 +1,132 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <style>
+      body {
+        width: 280px;
+        max-height: 500px;
+      }
 
-<head>
-  <style>
-    body {
-      width: 250px;
-      max-height: 500px;
-    }
+      .container {
+        overflow: scroll;
+        padding: 2px;
+      }
 
-    .container {
-      /* text-align: center; */
-      padding: 5px;
-    }
+      button {
+        margin-bottom: 5px;
+        width: 100%;
+      }
 
-    button {
-      margin-bottom: 5px;
-      width: 100%;
-    }
+      #messages {
+        color: #28a745 !important;
+      }
 
-    #messages {
-      color: #28a745 !important
-    }
+      #warnings {
+        color: #ffc107 !important;
+      }
 
-    #warnings {
-      color: #ffc107 !important
-    }
+      #progress {
+        text-align: center;
+        display: none;
+      }
 
-    #progress {
-      display: none;
-    }
+      progress {
+        width: 100%;
+      }
 
-    .text-center {
-      text-align: center;
-    }
-  </style>
-</head>
+      .text-center {
+        text-align: center;
+      }
 
-<body>
-  <div class="container">
-    <h3>Backup Cookies</h3>
-    <button id="backup">Backup All Cookies</button>
-    <hr>
-    <h3>Restore Cookies</h3>
-    <p>
-      <small>Select your latest .ckz file</small>
-    </p>
-    <input type="file" id="restore" name="file" id="">
-    <br>
-    <br>
-    <div id="progress">
-      <progress id="progressbar" value="0" max="0"></progress>
+      .passwd-wrap {
+        display: none;
+        padding: 15px;
+        /* display: inline-block; */
+        text-align: center;
+        border: 1px solid #dadce0;
+        border-radius: 10px;
+        background-color: #fcf8e8;
+      }
+
+      .passwd-label {
+        display: inline-block;
+        margin-bottom: 5px;
+      }
+
+      .wrap {
+        margin-bottom: 15px;
+        padding: 15px;
+        border: 1px solid #dadce0;
+        border-radius: 10px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="wrap" id="backup-wrap">
+        <h3>Backup Cookies</h3>
+        <button id="backup">Backup All Cookies</button>
+        <span class="passwd-wrap" id="enc-passwd">
+          <form id="enc-passwd-form">
+            <small class="passwd-label"
+              ><b>Enter Encryption Password: </b>
+
+              This is important. Please don't forget this password. You'll need
+              it when you restore your cookies.</small
+            >
+            <input
+              type="password"
+              name="enc-passwd"
+              id="inp-enc-passwd"
+              minlength="3"
+              required
+              placeholder="password"
+            />
+          </form>
+        </span>
+      </div>
+      <div class="wrap" id="restore-wrap">
+        <h3>Restore Cookies</h3>
+        <p>
+          <small>Select your latest .ckz file</small>
+        </p>
+        <input type="file" id="restore" name="file" id="" />
+        <br />
+        <br />
+
+        <span class="passwd-wrap" id="dec-passwd">
+          <form id="dec-passwd-form">
+            <small class="passwd-label"><b>Enter Decryption Password</b></small>
+            <input
+              type="password"
+              name="dec-passwd"
+              id="inp-dec-passwd"
+              minlength="3"
+              required
+              placeholder="password"
+            />
+          </form>
+        </span>
+
+        <div id="progress">
+          <progress id="progressbar" value="0" max="0"></progress>
+        </div>
+      </div>
+      <br />
+      <div id="messages"></div>
+      <div id="warnings"></div>
     </div>
-    <br>
-    <div id="messages">
+    <!-- credits -->
+    <div class="text-center">
+      <small
+        >Made by
+        <a target="_blank" href="http://github.com/candh">candh</a></small
+      >
     </div>
-    <div id="warnings"></div>
-  </div>
-  <!-- credits -->
-  <p class="text-center"><small>Made by <a target="_blank" href="http://github.com/candh">candh</a></small></p>
-</body>
+  </body>
 
-<!-- https://bitwiseshiftleft.github.io/sjcl/sjcl.js -->
-<script src="sjcl.js"></script>
-<script src="popup.js"></script>
-
+  <!-- https://bitwiseshiftleft.github.io/sjcl/sjcl.js -->
+  <script src="sjcl.js"></script>
+  <script src="popup.js"></script>
 </html>
