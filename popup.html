@@ -1,80 +1,28 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <style>
-      body {
-        width: 280px;
-        max-height: 500px;
-      }
-
-      .container {
-        overflow: scroll;
-        padding: 2px;
-      }
-
-      button {
-        margin-bottom: 5px;
-        width: 100%;
-      }
-
-      #messages {
-        color: #28a745 !important;
-      }
-
-      #warnings {
-        color: #ffc107 !important;
-      }
-
-      #progress {
-        text-align: center;
-        display: none;
-      }
-
-      progress {
-        width: 100%;
-      }
-
-      .text-center {
-        text-align: center;
-      }
-
-      .passwd-wrap {
-        display: none;
-        padding: 15px;
-        /* display: inline-block; */
-        text-align: center;
-        border: 1px solid #dadce0;
-        border-radius: 10px;
-        background-color: #fcf8e8;
-      }
-
-      .passwd-label {
-        display: inline-block;
-        margin-bottom: 5px;
-      }
-
-      .wrap {
-        margin-bottom: 15px;
-        padding: 15px;
-        border: 1px solid #dadce0;
-        border-radius: 10px;
-      }
-    </style>
+    <link rel="stylesheet" href="style.css" />
   </head>
-
   <body>
-    <div class="container">
+    <div class="container-main-screen">
+      <div id="header">
+        <div id="header-content">
+          <img src="icons/48.png" width="20px" />
+          Cookies backup & restore
+        </div>
+      </div>
       <div class="wrap" id="backup-wrap">
-        <h3>Backup Cookies</h3>
-        <button id="backup">Backup All Cookies</button>
-        <span class="passwd-wrap" id="enc-passwd">
+        <button class="btn-primary" role="button" id="btn-backup">
+          Backup all cookies
+        </button>
+        <span class="passwd-wrap text-center" id="enc-passwd">
           <form id="enc-passwd-form">
-            <small class="passwd-label"
-              ><b>Enter Encryption Password: </b>
+            <div>
+              <small class="passwd-label"
+                ><b>Enter encryption password</b></small
+              >
+            </div>
 
-              This is important. Please don't forget this password. You'll need
-              it when you restore your cookies.</small
-            >
             <input
               type="password"
               name="enc-passwd"
@@ -83,21 +31,24 @@
               required
               placeholder="password"
             />
+
+            <button class="btn-enter text-muted">&#9166;</button>
+            <div class="passwd-caption">
+              <small
+                >Please don't forget this password, You'll need it when you
+                restore your cookies.</small
+              >
+            </div>
           </form>
         </span>
       </div>
       <div class="wrap" id="restore-wrap">
-        <h3>Restore Cookies</h3>
-        <p>
-          <small>Select your latest .ckz file</small>
-        </p>
+        <span class="title">Restore Cookies</span>
+        <p>Select your latest .ckz file</p>
         <input type="file" id="restore" name="file" id="" />
-        <br />
-        <br />
-
-        <span class="passwd-wrap" id="dec-passwd">
+        <span class="passwd-wrap text-center" id="dec-passwd">
           <form id="dec-passwd-form">
-            <small class="passwd-label"><b>Enter Decryption Password</b></small>
+            <small class="passwd-label"><b>Enter decryption password</b></small>
             <input
               type="password"
               name="dec-passwd"
@@ -106,6 +57,7 @@
               required
               placeholder="password"
             />
+            <button class="text-muted btn-enter">&#9166;</button>
           </form>
         </span>
 
@@ -113,16 +65,19 @@
           <progress id="progressbar" value="0" max="0"></progress>
         </div>
       </div>
-      <br />
       <div id="messages"></div>
       <div id="warnings"></div>
     </div>
+
     <!-- credits -->
-    <div class="text-center">
-      <small
-        >Made by
-        <a target="_blank" href="http://github.com/candh">candh</a></small
-      >
+    <div id="credits" class="text-center text-muted">
+      <small>
+        <a target="_blank" href="http://github.com/candh">candh</a>
+        /
+        <a target="_blank" href="https://github.com/candh/cookies-backup-chrome"
+          >home</a
+        >
+      </small>
     </div>
   </body>
 

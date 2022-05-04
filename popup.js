@@ -10,28 +10,22 @@ document
   .getElementById("enc-passwd-form")
   .addEventListener("submit", handleEncPasswdSubmit, false);
 
-document.getElementById("backup").onclick = (ev) => {
-  document.getElementById("enc-passwd").style.display = "inline-block";
-};
+document.getElementById("btn-backup").onclick = showEncPasswordInputBox;
 
 function handleEncPasswdSubmit(e) {
   e.preventDefault();
 
-  let pass = document.getElementById("inp-enc-passwd").value;
-  pass = pass.trim();
+  const pass = getEncPasswd();
 
   chrome.cookies.getAll({}, (cookies) => {
     if (cookies.length > 0) {
-      let cookielnk = document.createElement("a");
-      let data = btoa(sjcl.encrypt(pass, JSON.stringify(cookies), { ks: 256 }));
-      cookielnk.setAttribute("href", "data:text/plain;base64," + data);
+      const data = sjcl.encrypt(pass, JSON.stringify(cookies), { ks: 256 });
       // only using en-GB because it puts the date first
-      let date = new Date().toLocaleDateString("en-GB").replace(/\//g, "-");
-      let time = new Date().toLocaleTimeString("en-GB");
-      cookielnk.setAttribute("download", `cookies-${date}${time}.ckz`);
-      cookielnk.click();
-      document.getElementById("messages").innerHTML =
-        "Successfully backed up " + cookies.length + " cookies";
+      const date = new Date().toLocaleDateString("en-GB").replace(/\//g, "-");
+      const time = new Date().toLocaleTimeString("en-GB");
+      const filename = `cookies-${date}${time}.ckz`;
+      downloadJson(data, filename)
+      addToSuccessMessageList(backupSuccessAlert(cookies.length))
     } else {
       alert("No cookies to backup!");
     }
@@ -42,36 +36,37 @@ let cookieFile;
 
 function handleFileSelect(e) {
   cookieFile = e.target.files[0];
+  if (!cookieFile) {
+    hideDecPasswordInputBox()
+    return;
+  }
   if (!cookieFile.name.endsWith(".ckz")) {
     alert("Not a .ckz file. Please select again!");
     return;
   }
-  document.getElementById("dec-passwd").style.display = "inline-block";
+  showDecPasswordInputBox()
 }
 
 function handleDecPasswdSubmit(e) {
   e.preventDefault();
 
-  let pass = document.getElementById("inp-dec-passwd").value;
-  pass = pass.trim();
-
-  let reader = new FileReader();
+  const pass = getDecPasswd()
+  const reader = new FileReader();
   reader.readAsText(cookieFile);
+
   reader.onload = async (e) => {
     let cookies;
     try {
-      cookies = JSON.parse(sjcl.decrypt(pass, e.target.result));
+      const decrypted = sjcl.decrypt(pass, e.target.result)
+      cookies = JSON.parse(decrypted);
     } catch (error) {
       console.log(error);
       alert("Password Incorrect!");
       return;
     }
 
-    let progress = document.getElementById("progress");
-    progress.style.display = "block";
-
-    let progressbar = document.getElementById("progressbar");
-    progressbar.setAttribute("max", cookies.length);
+    // initialize progress bar
+    initProgressBar(cookies.length)
 
     let total = 0;
 
@@ -91,9 +86,7 @@ function handleDecPasswdSubmit(e) {
         cookie.path;
 
       if (epoch > cookie.expirationDate) {
-        document.getElementById(
-          "warnings"
-        ).innerHTML += `<p>Cookie ${cookie.name} for the domain ${url} has expired</p>`;
+        addToWarningMessageList(expirationWarning(cookie.name, url))
         continue;
       }
 
@@ -112,6 +105,7 @@ function handleDecPasswdSubmit(e) {
       // .set doesn't accepts these
       delete cookie.hostOnly;
       delete cookie.session;
+
       // .set wants url
       cookie.url = url;
       let c = await new Promise((resolve, reject) => {
@@ -125,21 +119,107 @@ function handleDecPasswdSubmit(e) {
         console.error(JSON.stringify(cookie));
         console.error(JSON.stringify(chrome.runtime.lastError));
         console.error(chrome.runtime.lastError);
-        document.getElementById(
-          "warnings"
-        ).innerHTML += `<p>Error while restoring the cookie ${cookie.name} for the URL ${cookie.url}</p>`;
+        addToWarningMessageList(unknownErrWarning(cookie.name, cookie.url))
       } else {
         total++;
-        progressbar.setAttribute("value", total);
+        updateProgressBar(total)
       }
     }
 
     // update messages
-    document.getElementById(
-      "messages"
-    ).innerHTML = `Successfully restored ${total} cookies out of ${cookies.length}`;
+    addToSuccessMessageList(restoreSuccessAlert(total, cookies.length))
 
     // hide progress bar
-    progress.style.display = "none";
+    hideProgressBar()
   };
+}
+
+function createWarning(text) {
+  const div = document.createElement("div");
+  div.classList.add("alert", "alert-warning");
+  div.innerHTML = text;
+  return div;
+}
+
+function createSuccessAlert(text) {
+  const div = document.createElement("div");
+  div.classList.add("alert", "alert-success");
+  div.innerHTML = text;
+  return div;
+}
+
+function unknownErrWarning(cookie_name, cookie_url) {
+  if (cookie_name && cookie_url) {
+    return createWarning(`Cookie ${cookie_name} for the domain ${cookie_url} could not be restored`)
+  }
+}
+
+function expirationWarning(cookie_name, cookie_url) {
+  if (cookie_name && cookie_url) {
+    return createWarning(`Cookie ${cookie_name} for the domain ${cookie_url} has expired`)
+  }
+}
+
+function backupSuccessAlert(totalCookies) {
+  return createSuccessAlert(`Successfully backed up <b>${totalCookies.toLocaleString()}</b> cookies!`)
+}
+
+function restoreSuccessAlert(restoredCookies, totalCookies) {
+  return createSuccessAlert(`Successfully restored <b>${restoredCookies.toLocaleString()}</b> cookies out of <b>${totalCookies.toLocaleString()}</b>`);
+}
+
+function showEncPasswordInputBox(e) {
+  document.getElementById("enc-passwd").style.display = "inline-block";
+  // activate the input box
+  document.getElementById("inp-enc-passwd").focus();
+}
+
+function showDecPasswordInputBox(e) {
+  document.getElementById("dec-passwd").style.display = "inline-block";
+  document.getElementById("inp-dec-passwd").focus()
+}
+
+function hideDecPasswordInputBox(e) {
+  document.getElementById("dec-passwd").style.display = "none";
+}
+
+function addToSuccessMessageList(node) {
+  document.getElementById("messages").appendChild(node)
+}
+
+function addToWarningMessageList(node) {
+  document.getElementById("warnings").appendChild(node)
+}
+
+function getEncPasswd() {
+  const pass = document.getElementById("inp-enc-passwd").value;
+  return pass.trim();
+}
+
+function getDecPasswd() {
+  const pass = document.getElementById("inp-dec-passwd").value;
+  return pass.trim();
+}
+
+function initProgressBar(maxVal) {
+  document.getElementById("progress").style.display = "block";
+  document.getElementById("progressbar").setAttribute("max", maxVal);
+}
+
+function updateProgressBar(val) {
+  document.getElementById("progressbar").setAttribute("value", val);
+}
+
+function hideProgressBar() {
+  document.getElementById("progressbar").setAttribute("value", 0);
+  document.getElementById("progress").style.display = "none";
+}
+
+function downloadJson(data, filename) {
+  const blob = new Blob([data], { type: "application/json" });
+  const cookieLink = document.createElement("a");
+  const url = URL.createObjectURL(blob);
+  cookieLink.setAttribute("href", url);
+  cookieLink.setAttribute("download", filename);
+  cookieLink.click();
 }
