@@ -47,7 +47,8 @@ body {
 }
 
 .container-main-screen {
-  overflow: scroll;
+  overflow-y: auto;
+  overflow-x: hidden;
   padding: 0px 5px;
 }
 
@@ -94,11 +95,19 @@ progress {
 }
 
 .wrap {
+  display: flex;
+  flex-direction: column;
   background: white;
   margin-bottom: 15px;
   padding: 1em;
   border: 1.5px solid var(--light-blue-grey);
   border-radius: 10px;
+}
+
+.input-group {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: center;
 }
 
 #btn-backup {
@@ -162,6 +171,7 @@ input[type="password"]:focus {
 }
 
 .btn-enter {
+  margin-left: 4px;
   display: inline-block;
   background-color: #ffffff;
   padding: 5px 10px;

@@ -23,16 +23,17 @@
               >
             </div>
 
-            <input
-              type="password"
-              name="enc-passwd"
-              id="inp-enc-passwd"
-              minlength="3"
-              required
-              placeholder="password"
-            />
-
-            <button class="btn-enter text-muted">&#9166;</button>
+            <div class="input-group">
+              <input
+                type="password"
+                name="enc-passwd"
+                id="inp-enc-passwd"
+                minlength="3"
+                required
+                placeholder="password"
+              />
+              <button class="btn-enter text-muted">&#9166;</button>
+            </div>
             <div class="passwd-caption">
               <small
                 >Please don't forget this password, You'll need it when you
@@ -49,15 +50,17 @@
         <span class="passwd-wrap text-center" id="dec-passwd">
           <form id="dec-passwd-form">
             <small class="passwd-label"><b>Enter decryption password</b></small>
-            <input
-              type="password"
-              name="dec-passwd"
-              id="inp-dec-passwd"
-              minlength="3"
-              required
-              placeholder="password"
-            />
-            <button class="text-muted btn-enter">&#9166;</button>
+            <div class="input-group">
+              <input
+                type="password"
+                name="dec-passwd"
+                id="inp-dec-passwd"
+                minlength="3"
+                required
+                placeholder="password"
+              />
+              <button class="text-muted btn-enter">&#9166;</button>
+            </div>
           </form>
         </span>
 
