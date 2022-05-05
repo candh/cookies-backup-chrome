@@ -241,3 +241,8 @@ input[type="file"]::file-selector-button:active {
 #credits {
   margin-bottom: 5px;
 }
+
+#credits a {
+  color: #0366d6;
+  text-decoration: none;
+}
