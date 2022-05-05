@@ -16,13 +16,10 @@
           Backup all cookies
         </button>
         <span class="passwd-wrap text-center" id="enc-passwd">
-          <form id="enc-passwd-form">
+          <form id="enc-passwd-form" class="gap-5px">
             <div>
-              <small class="passwd-label"
-                ><b>Enter encryption password</b></small
-              >
+              <small><b>Enter encryption password</b></small>
             </div>
-
             <div class="input-group">
               <input
                 type="password"
@@ -45,31 +42,49 @@
       </div>
       <div class="wrap" id="restore-wrap">
         <span class="title">Restore Cookies</span>
-        <p>Select your latest .ckz file</p>
-        <input type="file" id="restore" name="file" id="" />
+        <div id="restore-upload-wrap" class="wrap-tight">
+          <label for="file">Select your latest .ckz file</label>
+          <input type="file" id="restore" name="file" id="" />
+        </div>
+        <p class="text-center" id="btn-upload-fallback">
+          <a href="#">Unable to upload a .ckz file?</a>
+        </p>
         <span class="passwd-wrap text-center" id="dec-passwd">
-          <form id="dec-passwd-form">
-            <small class="passwd-label"><b>Enter decryption password</b></small>
-            <div class="input-group">
-              <input
-                type="password"
-                name="dec-passwd"
-                id="inp-dec-passwd"
-                minlength="3"
-                required
-                placeholder="password"
-              />
-              <button class="text-muted btn-enter">&#9166;</button>
+          <form id="dec-passwd-form" class="gap-15px">
+            <div class="gap-5px" id="restore-using-text-wrap">
+              <small><b>Paste the entire contents of your .ckz file</b></small>
+              <textarea
+                id="ckz-textarea"
+                rows="5"
+                placeholder="{iv: 'kjFC7RBV-N4', 'v': 1, 'iter': 10000, ...}"
+                autofocus
+              ></textarea>
+            </div>
+            <div class="gap-5px">
+              <small><b>Enter decryption password</b></small>
+              <div class="input-group">
+                <input
+                  type="password"
+                  name="dec-passwd"
+                  id="inp-dec-passwd"
+                  minlength="3"
+                  required
+                  placeholder="password"
+                />
+                <button class="text-muted btn-enter">&#9166;</button>
+              </div>
             </div>
           </form>
         </span>
-
         <div id="progress">
           <progress id="progressbar" value="0" max="0"></progress>
         </div>
       </div>
-      <div id="messages"></div>
-      <div id="warnings"></div>
+
+      <div>
+        <div id="messages"></div>
+        <div id="warnings"></div>
+      </div>
     </div>
 
     <!-- credits -->

@@ -12,6 +12,8 @@ document
 
 document.getElementById("btn-backup").onclick = showEncPasswordInputBox;
 
+document.getElementById("btn-upload-fallback").onclick = showFallbackCkzInput;
+
 function handleEncPasswdSubmit(e) {
   e.preventDefault();
 
@@ -44,6 +46,7 @@ function handleFileSelect(e) {
     alert("Not a .ckz file. Please select again!");
     return;
   }
+  hideFallbackCkzButton()
   showDecPasswordInputBox()
 }
 
@@ -51,22 +54,27 @@ function handleDecPasswdSubmit(e) {
   e.preventDefault();
 
   const pass = getDecPasswd()
-  const reader = new FileReader();
-  reader.readAsText(cookieFile);
 
-  reader.onload = async (e) => {
+  getCkzFileDataAsText(async (data) => {
     let cookies;
+
     try {
-      const decrypted = sjcl.decrypt(pass, e.target.result)
+      const decrypted = sjcl.decrypt(pass, data)
       cookies = JSON.parse(decrypted);
     } catch (error) {
       console.log(error);
-      alert("Password Incorrect!");
+      if (error instanceof sjcl.exception.corrupt) {
+        alert("Password incorrect!");
+      } else if (error instanceof sjcl.exception.invalid) {
+        alert("File is not a valid .ckz file!");
+      } else {
+        alert("Unknown error!");
+      }
       return;
     }
 
     // initialize progress bar
-    initProgressBar(cookies.length)
+    initRestoreProgressBar(cookies.length)
 
     let total = 0;
 
@@ -122,7 +130,7 @@ function handleDecPasswdSubmit(e) {
         addToWarningMessageList(unknownErrWarning(cookie.name, cookie.url))
       } else {
         total++;
-        updateProgressBar(total)
+        updateRestoreProgressBar(total)
       }
     }
 
@@ -130,10 +138,11 @@ function handleDecPasswdSubmit(e) {
     addToSuccessMessageList(restoreSuccessAlert(total, cookies.length))
 
     // hide progress bar
-    hideProgressBar()
-  };
+    hideRestoreProgressBar()
+  })
 }
 
+// NOTE: most of these methods are shallow, but i wanted to separate application logic from the DOM
 function createWarning(text) {
   const div = document.createElement("div");
   div.classList.add("alert", "alert-warning");
@@ -168,14 +177,19 @@ function restoreSuccessAlert(restoredCookies, totalCookies) {
   return createSuccessAlert(`Successfully restored <b>${restoredCookies.toLocaleString()}</b> cookies out of <b>${totalCookies.toLocaleString()}</b>`);
 }
 
+function hideBackupButton() {
+  document.getElementById("btn-backup").style.display = "none";
+}
+
 function showEncPasswordInputBox(e) {
-  document.getElementById("enc-passwd").style.display = "inline-block";
+  hideBackupButton()
+  document.getElementById("enc-passwd").style.display = "flex";
   // activate the input box
   document.getElementById("inp-enc-passwd").focus();
 }
 
 function showDecPasswordInputBox(e) {
-  document.getElementById("dec-passwd").style.display = "inline-block";
+  document.getElementById("dec-passwd").style.display = "flex";
   document.getElementById("inp-dec-passwd").focus()
 }
 
@@ -192,27 +206,41 @@ function addToWarningMessageList(node) {
 }
 
 function getEncPasswd() {
-  const pass = document.getElementById("inp-enc-passwd").value;
-  return pass.trim();
+  return document.getElementById("inp-enc-passwd").value.trim();
 }
 
 function getDecPasswd() {
-  const pass = document.getElementById("inp-dec-passwd").value;
-  return pass.trim();
+  return document.getElementById("inp-dec-passwd").value.trim();
 }
 
-function initProgressBar(maxVal) {
+function initRestoreProgressBar(maxVal) {
   document.getElementById("progress").style.display = "block";
   document.getElementById("progressbar").setAttribute("max", maxVal);
 }
 
-function updateProgressBar(val) {
+function updateRestoreProgressBar(val) {
   document.getElementById("progressbar").setAttribute("value", val);
 }
 
-function hideProgressBar() {
+function hideRestoreProgressBar() {
   document.getElementById("progressbar").setAttribute("value", 0);
   document.getElementById("progress").style.display = "none";
+}
+
+function hideFallbackCkzButton() {
+  document.getElementById("btn-upload-fallback").style.display = "none"
+}
+
+function showFallbackCkzInput() {
+  hideFallbackCkzButton()
+  document.getElementById("restore-upload-wrap").style.display = "none"
+  // show the fallback
+  document.getElementById("restore-using-text-wrap").style.display = "flex"
+  document.getElementById("dec-passwd").style.display = "flex";
+}
+
+function getCkzFileContentsFromTextarea() {
+  return document.getElementById("ckz-textarea").value.trim()
 }
 
 function downloadJson(data, filename) {
@@ -222,4 +250,16 @@ function downloadJson(data, filename) {
   cookieLink.setAttribute("href", url);
   cookieLink.setAttribute("download", filename);
   cookieLink.click();
+}
+
+function getCkzFileDataAsText(callback) {
+  if (cookieFile) {
+    const reader = new FileReader();
+    reader.readAsText(cookieFile);
+    reader.onload = (e) => {
+      callback(e.target.result);
+    }
+  } else {
+    callback(getCkzFileContentsFromTextarea())
+  }
 }

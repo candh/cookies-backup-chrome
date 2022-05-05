@@ -8,6 +8,15 @@
   color: var(--grey);
 }
 
+a {
+  color: #0366d6;
+  text-decoration: none;
+}
+
+p {
+  margin: 0;
+}
+
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
     Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
@@ -33,7 +42,6 @@ body {
 #header {
   display: flex;
   justify-content: center;
-  margin: 10px 0px;
   margin-top: 5px;
 }
 
@@ -50,6 +58,10 @@ body {
   overflow-y: auto;
   overflow-x: hidden;
   padding: 0px 5px;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  row-gap: 10px;
 }
 
 #messages {
@@ -63,7 +75,6 @@ body {
 #progress {
   text-align: center;
   display: none;
-  margin-top: 10px;
 }
 
 progress {
@@ -76,32 +87,37 @@ progress {
 
 .passwd-wrap {
   display: none;
-  /* display: inline-block; */
-  padding: 15px;
-  /* text-align: center; */
+  /* display: flex; */
+  padding: 0.8em;
   border-radius: 6px;
   background-color: var(--very-light-blue-grey);
-  margin-top: 1em;
   box-shadow: var(--light-blue-grey) 0 1px 0;
+  flex-direction: column;
+  row-gap: 10px;
+  flex-wrap: nowrap;
 }
 
-.passwd-caption {
-  padding-top: 5px;
+#restore-using-text-wrap {
+  display: none;
 }
 
-.passwd-label {
-  display: inline-block;
-  margin-bottom: 5px;
-}
-
-.wrap {
+.wrap,
+.wrap-tight {
   display: flex;
   flex-direction: column;
+  row-gap: 12px;
   background: white;
-  margin-bottom: 15px;
   padding: 1em;
   border: 1.5px solid var(--light-blue-grey);
-  border-radius: 10px;
+  border-radius: 6px;
+}
+
+.wrap-tight {
+  display: flex;
+  flex-direction: column;
+  row-gap: 5px;
+  border: 1.5px dotted var(--light-blue-grey);
+  flex-wrap: nowrap;
 }
 
 .input-group {
@@ -152,7 +168,8 @@ progress {
   box-shadow: rgba(20, 70, 32, 0.2) 0 1px 0 inset;
 }
 
-input[type="password"] {
+input[type="password"],
+textarea {
   width: auto;
   padding: 5px 12px;
   vertical-align: middle;
@@ -164,7 +181,8 @@ input[type="password"] {
   outline: none;
   box-shadow: rgba(225, 228, 232, 0.2) 0px 1px 0px 0px inset;
 }
-input[type="password"]:focus {
+input[type="password"]:focus,
+textarea:focus {
   border-color: #0366d6;
   outline: none;
   box-shadow: rgba(3, 102, 214, 0.3) 0px 0px 0px 3px;
@@ -238,11 +256,33 @@ input[type="file"]::file-selector-button:active {
   color: #856404;
 }
 
-#credits {
-  margin-bottom: 5px;
+#ckz-textarea {
+  font-size: 12px;
+  font-family: monospace;
+  resize: none;
 }
 
-#credits a {
-  color: #0366d6;
-  text-decoration: none;
+.gap-15px {
+  display: flex;
+  flex-direction: column;
+  row-gap: 15px;
+  flex-wrap: nowrap;
+}
+
+.gap-10px {
+  display: flex;
+  flex-direction: column;
+  row-gap: 10px;
+  flex-wrap: nowrap;
+}
+
+.gap-5px {
+  display: flex;
+  flex-direction: column;
+  row-gap: 5px;
+  flex-wrap: nowrap;
+}
+
+#credits {
+  padding-bottom: 5px;
 }
