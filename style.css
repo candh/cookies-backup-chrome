@@ -28,15 +28,9 @@ body {
     Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   width: 285px;
   max-height: 500px;
-
-  /* TODO: uncomment before releasing */
-  /* background-color: #ffffff;
-  background-image: radial-gradient(var(--light-blue-grey) 1px, transparent 1px),
-    radial-gradient(var(--light-blue-grey) 1px, #ffffff 1px);
-  background-size: 20px 20px;
-  background-position: 0 0, 10px 10px; */
-
-  color: #24292e;
+  background-color: #ffffff;
+  background-image: linear-gradient(#eceff1 0.4px, transparent 0.4px), linear-gradient(to right, #eceff1 0.4px, #ffffff 0.4px);
+  background-size: 8px 8px;
 }
 
 #header {
