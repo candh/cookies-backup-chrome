@@ -60,7 +60,7 @@ body {
   flex-direction: column;
   flex-wrap: nowrap;
   row-gap: 10px;
-  padding: 0.8em;
+  padding: 1em;
   border-radius: 6px;
   background-color: var(--very-light-blue-grey);
   box-shadow: var(--light-blue-grey) 0 1px 0;
@@ -123,7 +123,8 @@ body {
 
 input[type="password"],
 textarea {
-  width: auto;
+  width: 100%;
+  box-sizing: border-box;
   padding: 5px 12px;
   vertical-align: middle;
   background-color: #fff;
