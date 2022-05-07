@@ -23,11 +23,12 @@ function handleEncPasswdSubmit(e) {
     if (cookies.length > 0) {
       const data = sjcl.encrypt(pass, JSON.stringify(cookies), { ks: 256 });
       // only using en-GB because it puts the date first
-      const date = new Date().toLocaleDateString("en-GB").replace(/\//g, "-");
-      const time = new Date().toLocaleTimeString("en-GB");
+      const d = new Date()
+      const date = d.toLocaleDateString("en-GB").replace(/\//g, "-");
+      const time = d.toLocaleTimeString("en-GB");
       const filename = `cookies-${date}${time}.ckz`;
       downloadJson(data, filename)
-      addToSuccessMessageList(backupSuccessAlert(cookies.length))
+      backupSuccessAlert(cookies.length)
     } else {
       alert("No cookies to backup!");
     }
@@ -38,12 +39,9 @@ let cookieFile;
 
 function handleFileSelect(e) {
   cookieFile = e.target.files[0];
-  if (!cookieFile) {
-    hideDecPasswordInputBox()
-    return;
-  }
-  if (!cookieFile.name.endsWith(".ckz")) {
+  if (!cookieFile || !cookieFile.name.endsWith(".ckz")) {
     alert("Not a .ckz file. Please select again!");
+    hideDecPasswordInputBox()
     return;
   }
   hideFallbackCkzButton()
@@ -94,7 +92,7 @@ function handleDecPasswdSubmit(e) {
         cookie.path;
 
       if (epoch > cookie.expirationDate) {
-        addToWarningMessageList(expirationWarning(cookie.name, url))
+        expirationWarning(cookie.name, url)
         continue;
       }
 
@@ -126,8 +124,7 @@ function handleDecPasswdSubmit(e) {
         );
         console.error(JSON.stringify(cookie));
         console.error(JSON.stringify(chrome.runtime.lastError));
-        console.error(chrome.runtime.lastError);
-        addToWarningMessageList(unknownErrWarning(cookie.name, cookie.url))
+        unknownErrWarning(cookie.name, cookie.url)
       } else {
         total++;
         updateRestoreProgressBar(total)
@@ -135,7 +132,7 @@ function handleDecPasswdSubmit(e) {
     }
 
     // update messages
-    addToSuccessMessageList(restoreSuccessAlert(total, cookies.length))
+    restoreSuccessAlert(total, cookies.length)
 
     // hide progress bar
     hideRestoreProgressBar()
@@ -159,22 +156,22 @@ function createSuccessAlert(text) {
 
 function unknownErrWarning(cookie_name, cookie_url) {
   if (cookie_name && cookie_url) {
-    return createWarning(`Cookie ${cookie_name} for the domain ${cookie_url} could not be restored`)
+    addToWarningMessageList(createWarning(`Cookie ${cookie_name} for the domain ${cookie_url} could not be restored`))
   }
 }
 
 function expirationWarning(cookie_name, cookie_url) {
   if (cookie_name && cookie_url) {
-    return createWarning(`Cookie ${cookie_name} for the domain ${cookie_url} has expired`)
+    addToWarningMessageList(createWarning(`Cookie ${cookie_name} for the domain ${cookie_url} has expired`))
   }
 }
 
 function backupSuccessAlert(totalCookies) {
-  return createSuccessAlert(`Successfully backed up <b>${totalCookies.toLocaleString()}</b> cookies!`)
+  addToSuccessMessageList(createSuccessAlert(`Successfully backed up <b>${totalCookies.toLocaleString()}</b> cookies!`))
 }
 
 function restoreSuccessAlert(restoredCookies, totalCookies) {
-  return createSuccessAlert(`Successfully restored <b>${restoredCookies.toLocaleString()}</b> cookies out of <b>${totalCookies.toLocaleString()}</b>`);
+  addToSuccessMessageList(createSuccessAlert(`Successfully restored <b>${restoredCookies.toLocaleString()}</b> cookies out of <b>${totalCookies.toLocaleString()}</b>`));
 }
 
 function hideBackupButton() {
@@ -252,14 +249,18 @@ function downloadJson(data, filename) {
   cookieLink.click();
 }
 
-function getCkzFileDataAsText(callback) {
+function getCkzFileDataAsText(cb) {
   if (cookieFile) {
     const reader = new FileReader();
     reader.readAsText(cookieFile);
     reader.onload = (e) => {
-      callback(e.target.result);
+      cb(e.target.result);
+    }
+    reader.onerror = (e) => {
+      console.error(e);
+      alert("Unknown error while reading the .ckz file!");
     }
   } else {
-    callback(getCkzFileContentsFromTextarea())
+    cb(getCkzFileContentsFromTextarea())
   }
 }
