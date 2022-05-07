@@ -11,7 +11,7 @@ Want to change machines or want to do a fresh OS install but don't want to re-si
 Backups Chrome Cookies, Encrypts them and Restores them when needed. Simple, Secure and Easy to Use.
 
 <p align="center">
-    <img src="demo.gif" width=300px>
+    <img src="demo.gif" width=400px>
 </p>
 
 Encryption is done using [sjcl](https://bitwiseshiftleft.github.io/sjcl/)
