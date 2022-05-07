@@ -4,10 +4,6 @@
   --grey: #757575;
 }
 
-.text-muted {
-  color: var(--grey);
-}
-
 a {
   color: #0366d6;
   text-decoration: none;
@@ -15,6 +11,16 @@ a {
 
 p {
   margin: 0;
+}
+
+progress {
+  width: 100%;
+}
+
+textarea {
+  font-size: 12px;
+  font-family: monospace;
+  resize: none;
 }
 
 body {
@@ -33,77 +39,37 @@ body {
   color: #24292e;
 }
 
-.title {
-  line-height: 20px;
-  font-weight: bold;
-  font-size: 14px;
-}
-
 #header {
   display: flex;
   justify-content: center;
   margin-top: 5px;
 }
 
-#header-content {
-  font-size: 17px;
-  font-weight: bold;
-  text-align: center;
-  display: flex;
-  align-items: center;
-  column-gap: 4px;
-}
-
 .container-main-screen {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
   overflow-y: auto;
   overflow-x: hidden;
   padding: 0px 5px;
+  row-gap: 10px;
+}
+
+.wrap-card {
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
   row-gap: 10px;
-}
-
-#messages {
-  color: #28a745 !important;
-}
-
-#warnings {
-  color: #ffc107 !important;
-}
-
-#progress {
-  text-align: center;
-  display: none;
-}
-
-progress {
-  width: 100%;
-}
-
-.text-center {
-  text-align: center;
-}
-
-.passwd-wrap {
-  display: none;
-  /* display: flex; */
   padding: 0.8em;
   border-radius: 6px;
   background-color: var(--very-light-blue-grey);
   box-shadow: var(--light-blue-grey) 0 1px 0;
-  flex-direction: column;
-  row-gap: 10px;
-  flex-wrap: nowrap;
-}
-
-#restore-using-text-wrap {
-  display: none;
 }
 
 .wrap,
 .wrap-tight {
   display: flex;
+  flex-wrap: nowrap;
   flex-direction: column;
   row-gap: 12px;
   background: white;
@@ -113,21 +79,8 @@ progress {
 }
 
 .wrap-tight {
-  display: flex;
-  flex-direction: column;
-  row-gap: 5px;
+  row-gap: 8px;
   border: 1.5px dotted var(--light-blue-grey);
-  flex-wrap: nowrap;
-}
-
-.input-group {
-  display: flex;
-  flex-wrap: nowrap;
-  justify-content: center;
-}
-
-#btn-backup {
-  width: 100%;
 }
 
 .btn-primary {
@@ -173,14 +126,13 @@ textarea {
   width: auto;
   padding: 5px 12px;
   vertical-align: middle;
-  background-color: #ffffff;
-  background-repeat: no-repeat;
-  background-position: right 8px center;
+  background-color: #fff;
   border: 1px solid var(--light-blue-grey);
   border-radius: 6px;
   outline: none;
   box-shadow: rgba(225, 228, 232, 0.2) 0px 1px 0px 0px inset;
 }
+
 input[type="password"]:focus,
 textarea:focus {
   border-color: #0366d6;
@@ -189,16 +141,17 @@ textarea:focus {
 }
 
 .btn-enter {
-  margin-left: 4px;
-  display: inline-block;
   background-color: #ffffff;
   padding: 5px 10px;
   vertical-align: middle;
-  background-repeat: no-repeat;
   border: 1px solid var(--light-blue-grey);
   border-radius: 6px;
   outline: none;
-  box-shadow: rgba(225, 228, 232, 0.2) 0px 1px 0px 0px inset;
+  box-shadow: rgba(225, 228, 232, 0.5) 0px 1px 0px 0px inset;
+}
+
+input[type="file"] {
+  font-size: 11px;
 }
 
 input[type="file"]::file-selector-button {
@@ -207,13 +160,12 @@ input[type="file"]::file-selector-button {
   border: 1px solid rgba(27, 31, 35, 0.15);
   border-radius: 6px;
   box-shadow: rgba(27, 31, 35, 0.04) 0 1px 0,
-    rgba(255, 255, 255, 0.25) 0 1px 0 inset;
+    rgba(255, 255, 255, 0.5) 0 1px 0 inset;
   box-sizing: border-box;
   cursor: pointer;
   font-size: 14px;
   font-weight: 500;
   line-height: 20px;
-  list-style: none;
   padding: 6px 16px;
   position: relative;
   user-select: none;
@@ -256,33 +208,57 @@ input[type="file"]::file-selector-button:active {
   color: #856404;
 }
 
-#ckz-textarea {
-  font-size: 12px;
-  font-family: monospace;
-  resize: none;
+#credits {
+  padding-bottom: 5px;
 }
 
+/* helper classes */
+.title {
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.large-title {
+  font-weight: bold;
+  font-size: 17px;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-muted {
+  color: var(--grey);
+}
+
+.gap-5px,
+.gap-10px,
 .gap-15px {
   display: flex;
   flex-direction: column;
-  row-gap: 15px;
   flex-wrap: nowrap;
+}
+
+.gap-15px {
+  row-gap: 15px;
 }
 
 .gap-10px {
-  display: flex;
-  flex-direction: column;
   row-gap: 10px;
-  flex-wrap: nowrap;
 }
 
 .gap-5px {
-  display: flex;
-  flex-direction: column;
   row-gap: 5px;
-  flex-wrap: nowrap;
 }
 
-#credits {
-  padding-bottom: 5px;
+.hidden {
+  display: none;
+}
+
+.two-col-group {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+  column-gap: 4px;
 }

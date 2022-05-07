@@ -6,7 +6,7 @@
   <body>
     <div class="container-main-screen">
       <div id="header">
-        <div id="header-content">
+        <div class="two-col-group text-center large-title">
           <img src="icons/48.png" width="20px" />
           Cookies backup & restore
         </div>
@@ -15,12 +15,12 @@
         <button class="btn-primary" role="button" id="btn-backup">
           Backup all cookies
         </button>
-        <span class="passwd-wrap text-center" id="enc-passwd">
+        <span class="wrap-card hidden text-center" id="enc-passwd">
           <form id="enc-passwd-form" class="gap-5px">
             <div>
               <small><b>Enter encryption password</b></small>
             </div>
-            <div class="input-group">
+            <div class="two-col-group">
               <input
                 type="password"
                 name="enc-passwd"
@@ -31,12 +31,10 @@
               />
               <button class="btn-enter text-muted">&#9166;</button>
             </div>
-            <div class="passwd-caption">
-              <small
-                >Please don't forget this password, You'll need it when you
-                restore your cookies.</small
-              >
-            </div>
+            <small class="text-muted"
+              >Please don't forget this password, You'll need it when you
+              restore your cookies.</small
+            >
           </form>
         </span>
       </div>
@@ -44,14 +42,20 @@
         <span class="title">Restore Cookies</span>
         <div id="restore-upload-wrap" class="wrap-tight">
           <label for="file">Select your latest .ckz file</label>
-          <input type="file" id="restore" name="file" id="" />
+          <input
+            class="text-muted"
+            type="file"
+            id="restore"
+            name="file"
+            id=""
+          />
         </div>
         <p class="text-center" id="btn-upload-fallback">
           <a href="#">Unable to upload a .ckz file?</a>
         </p>
-        <span class="passwd-wrap text-center" id="dec-passwd">
+        <span class="wrap-card hidden text-center" id="dec-passwd">
           <form id="dec-passwd-form" class="gap-15px">
-            <div class="gap-5px" id="restore-using-text-wrap">
+            <div class="gap-5px hidden" id="restore-using-text-wrap">
               <small><b>Paste the entire contents of your .ckz file</b></small>
               <textarea
                 id="ckz-textarea"
@@ -62,7 +66,7 @@
             </div>
             <div class="gap-5px">
               <small><b>Enter decryption password</b></small>
-              <div class="input-group">
+              <div class="two-col-group">
                 <input
                   type="password"
                   name="dec-passwd"
@@ -76,7 +80,7 @@
             </div>
           </form>
         </span>
-        <div id="progress">
+        <div id="progress" class="hidden">
           <progress id="progressbar" value="0" max="0"></progress>
         </div>
       </div>
