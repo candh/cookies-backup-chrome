@@ -1,128 +1,106 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <style>
-      body {
-        width: 280px;
-        max-height: 500px;
-      }
-
-      .container {
-        overflow: scroll;
-        padding: 2px;
-      }
-
-      button {
-        margin-bottom: 5px;
-        width: 100%;
-      }
-
-      #messages {
-        color: #28a745 !important;
-      }
-
-      #warnings {
-        color: #ffc107 !important;
-      }
-
-      #progress {
-        text-align: center;
-        display: none;
-      }
-
-      progress {
-        width: 100%;
-      }
-
-      .text-center {
-        text-align: center;
-      }
-
-      .passwd-wrap {
-        display: none;
-        padding: 15px;
-        /* display: inline-block; */
-        text-align: center;
-        border: 1px solid #dadce0;
-        border-radius: 10px;
-        background-color: #fcf8e8;
-      }
-
-      .passwd-label {
-        display: inline-block;
-        margin-bottom: 5px;
-      }
-
-      .wrap {
-        margin-bottom: 15px;
-        padding: 15px;
-        border: 1px solid #dadce0;
-        border-radius: 10px;
-      }
-    </style>
+    <link rel="stylesheet" href="style.css" />
   </head>
-
   <body>
-    <div class="container">
+    <div class="container-main-screen">
+      <div id="header">
+        <div class="two-col-group text-center large-title">
+          <img src="icons/48.png" width="20px" />
+          Cookies backup & restore
+        </div>
+      </div>
       <div class="wrap" id="backup-wrap">
-        <h3>Backup Cookies</h3>
-        <button id="backup">Backup All Cookies</button>
-        <span class="passwd-wrap" id="enc-passwd">
-          <form id="enc-passwd-form">
-            <small class="passwd-label"
-              ><b>Enter Encryption Password: </b>
-
-              This is important. Please don't forget this password. You'll need
-              it when you restore your cookies.</small
+        <button class="btn-primary" role="button" id="btn-backup">
+          Backup all cookies
+        </button>
+        <div class="wrap-card hidden text-center" id="enc-passwd">
+          <form id="enc-passwd-form" class="gap-5px">
+            <div>
+              <small><b>Enter encryption password</b></small>
+            </div>
+            <div class="two-col-group">
+              <input
+                type="password"
+                name="enc-passwd"
+                id="inp-enc-passwd"
+                minlength="3"
+                required
+                placeholder="password"
+              />
+              <button class="btn-enter text-muted">&#9166;</button>
+            </div>
+            <small class="text-muted"
+              >Please don't forget this password, You'll need it when you
+              restore your cookies.</small
             >
-            <input
-              type="password"
-              name="enc-passwd"
-              id="inp-enc-passwd"
-              minlength="3"
-              required
-              placeholder="password"
-            />
           </form>
-        </span>
+        </div>
       </div>
       <div class="wrap" id="restore-wrap">
-        <h3>Restore Cookies</h3>
-        <p>
-          <small>Select your latest .ckz file</small>
+        <span class="title">Restore Cookies</span>
+        <div id="restore-upload-wrap" class="wrap-tight">
+          <label for="file">Select your latest .ckz file</label>
+          <input
+            class="text-muted"
+            type="file"
+            id="restore"
+            name="file"
+            id=""
+          />
+        </div>
+        <p class="text-center" id="btn-upload-fallback">
+          <a href="#">Unable to upload a .ckz file?</a>
         </p>
-        <input type="file" id="restore" name="file" id="" />
-        <br />
-        <br />
-
-        <span class="passwd-wrap" id="dec-passwd">
-          <form id="dec-passwd-form">
-            <small class="passwd-label"><b>Enter Decryption Password</b></small>
-            <input
-              type="password"
-              name="dec-passwd"
-              id="inp-dec-passwd"
-              minlength="3"
-              required
-              placeholder="password"
-            />
+        <div class="wrap-card hidden text-center" id="dec-passwd">
+          <form id="dec-passwd-form" class="gap-15px">
+            <div class="gap-5px hidden" id="restore-using-text-wrap">
+              <small><b>Paste the contents of your .ckz file</b></small>
+              <textarea
+                id="ckz-textarea"
+                rows="5"
+                placeholder="{iv: 'kjFC7RBV-N4', 'v': 1, 'iter': 10000, ...}"
+                autofocus
+              ></textarea>
+            </div>
+            <div class="gap-5px">
+              <small><b>Enter decryption password</b></small>
+              <div class="two-col-group">
+                <input
+                  type="password"
+                  name="dec-passwd"
+                  id="inp-dec-passwd"
+                  minlength="3"
+                  required
+                  placeholder="password"
+                />
+                <button class="text-muted btn-enter">&#9166;</button>
+              </div>
+            </div>
           </form>
-        </span>
-
-        <div id="progress">
+        </div>
+        <div id="progress" class="hidden">
           <progress id="progressbar" value="0" max="0"></progress>
         </div>
       </div>
-      <br />
-      <div id="messages"></div>
-      <div id="warnings"></div>
-    </div>
-    <!-- credits -->
-    <div class="text-center">
-      <small
-        >Made by
-        <a target="_blank" href="http://github.com/candh">candh</a></small
-      >
+
+      <div>
+        <div id="messages"></div>
+        <div id="warnings"></div>
+      </div>
+      <!-- credits -->
+      <div id="credits" class="text-center text-muted">
+        <small>
+          <a target="_blank" href="http://github.com/candh">candh</a>
+          /
+          <a
+            target="_blank"
+            href="https://github.com/candh/cookies-backup-chrome"
+            >github</a
+          >
+        </small>
+      </div>
     </div>
   </body>
 
