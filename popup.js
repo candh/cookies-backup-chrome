@@ -247,6 +247,13 @@ function downloadJson(data, filename) {
   cookieLink.setAttribute("href", url);
   cookieLink.setAttribute("download", filename);
   cookieLink.click();
+
+  // fallback
+  const cookieLinkFallback = document.getElementById("btn-download-fallback")
+  const cookieLinkFallbackWrap = document.getElementById("btn-download-fallback-wrap");
+  cookieLinkFallbackWrap.style.display = "flex"
+  cookieLinkFallback.href = 'data:application/json;charset=utf-8,' + encodeURIComponent(data);
+  cookieLinkFallback.download = filename
 }
 
 function getCkzFileDataAsText(cb) {
