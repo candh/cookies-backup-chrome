@@ -25,8 +25,8 @@ function handleEncPasswdSubmit(e) {
       // only using en-GB because it puts the date first
       const d = new Date()
       const date = d.toLocaleDateString("en-GB").replace(/\//g, "-");
-      const time = d.toLocaleTimeString("en-GB");
-      const filename = `cookies-${date}${time}.ckz`;
+      const time = d.toLocaleTimeString("en-GB").replace(/:/g, "-");
+      const filename = `cookies-${date}-${time}.ckz`;
       downloadJson(data, filename)
       backupSuccessAlert(cookies.length)
     } else {
@@ -241,12 +241,16 @@ function getCkzFileContentsFromTextarea() {
 }
 
 function downloadJson(data, filename) {
-  const blob = new Blob([data], { type: "application/json" });
-  const cookieLink = document.createElement("a");
+  const blob = new Blob([data], { type: "application/ckz" });
   const url = URL.createObjectURL(blob);
-  cookieLink.setAttribute("href", url);
-  cookieLink.setAttribute("download", filename);
-  cookieLink.click();
+
+  chrome.downloads.download({ url: url, filename: filename }, (id) => {
+    chrome.downloads.onChanged.addListener((delta) => {
+      if (delta?.state?.current == "complete") {
+        chrome.downloads.show(id)
+      }
+    })
+  });
 }
 
 function getCkzFileDataAsText(cb) {
