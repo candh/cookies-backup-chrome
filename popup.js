@@ -243,9 +243,7 @@ function getCkzFileContentsFromTextarea() {
 function downloadJson(data, filename) {
   const blob = new Blob([data], { type: "application/ckz" });
   const url = URL.createObjectURL(blob);
-  chrome.downloads.download({ url: url, filename: filename }, (downloadId) => {
-    chrome.downloads.show(downloadId)
-  });
+  chrome.downloads.download({ url: url, filename: filename });
 }
 
 function getCkzFileDataAsText(cb) {
